@@ -18,7 +18,6 @@ $(document).ready(function(){
 //Initialize variables
 		var secretNum;
 		var guessCount;
-		var lastguess;
 		newGame();
 
 
@@ -27,6 +26,7 @@ $(document).ready(function(){
 			e.preventDefault();
 			var guess = parseInt($("#userGuess").val());
 			feedback(guess); // Feedback on the current guess BEFORE setting it to recent
+			lastguess = guess;
 			$("#guessList").append("<li>" + guess + "</li>");
 			$("form")[0].reset();
 		});
@@ -69,19 +69,37 @@ function feedback(num) {
 			$("#guessButton").hide();
 			feedback.text("You guessed the number!");
 
-		} else {
-			guessCount++;
-			$("#count").text(guessCount);
-
+		} else if (guessCount === 0) {
 			if (diff >= 50) {
+				updateCount();
 				feedback.text("Ice Cold");
 			} else if (diff >= 30 && diff < 50) {
+				updateCount();
 				feedback.text("Cold");
 			} else if (diff >= 10 && diff < 20) {
+				updateCount();
 				feedback.text("hot");
 			} else if (diff >=1 && diff < 10) {
+				updateCount();
 				feedback.text("very hot");
 			}
 		}
+		else {
+			var lastdiff = (Math.abs(secretNum - lastguess));
+			if (diff < lastdiff) {
+				updateCount();
+				feedback.text("Warmer");
+			} else if (diff > lastdiff) {
+				updateCount();
+				feedback.text("Colder");
+			} else {
+				feedback.text("You already guessed this number");
+			}
+		}
 	}
+}
+
+function updateCount() {
+	guessCount++;
+	$("#count").text(guessCount);
 }
