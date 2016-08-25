@@ -26,7 +26,7 @@ $(document).ready(function(){
 			e.preventDefault();
 			var guess = parseInt($("#userGuess").val());
 			feedback(guess); // Feedback on the current guess BEFORE setting it to recent
-			lastguess = guess;
+			lastguess = guess; //Ask about this. For some reason the only way to let lastguess have a global scope was to not initalize it above.
 			$("#guessList").append("<li>" + guess + "</li>");
 			$("form")[0].reset();
 		});
