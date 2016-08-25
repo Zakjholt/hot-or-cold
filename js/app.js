@@ -14,18 +14,24 @@ $(document).ready(function(){
 
 /** My Code **/
 
+
+//Initialize variables
 		var secretNum;
 		var guessCount;
+		var lastguess;
 		newGame();
 
+
+// When the user submits a number
 		$("form").submit(function(e) {
 			e.preventDefault();
-			feedback(parseInt($("#userGuess").val()));
-			$("#guessList").append("<li>" + parseInt($("#userGuess").val()) + "</li>");
+			var guess = parseInt($("#userGuess").val());
+			feedback(guess); // Feedback on the current guess BEFORE setting it to recent
+			$("#guessList").append("<li>" + guess + "</li>");
 			$("form")[0].reset();
 		});
 
-
+// When the user clicks on New Game
 		$(".new").click(function() {
 			newGame();
 		});
@@ -35,6 +41,8 @@ $(document).ready(function(){
 
 function newGame() {
 	guessCount = 0;
+	$("#userGuess").show();
+	$("#guessButton").show();
 	$("#count").text(guessCount);
 	$("#feedback").text("Make your Guess!");
 	$("#guessList").empty();
@@ -48,21 +56,32 @@ function randomNumSet() {
 
 
 function feedback(num) {
-	var diff = Math.abs(secretNum - num);
 	var feedback = $("#feedback");
-	if (diff === 0) {
-		feedback.text("You guessed the number!");
+	if (num % 1 !== 0) { //User enters something other than a number
+		feedback.text("Please enter a number");
+
 	} else {
-		guessCount++;
-		$("#count").text(guessCount);
-		if (diff >= 50) {
-			feedback.text("Ice Cold");
-		} else if (diff >= 30 && diff < 50) {
-			feedback.text("Cold");
-		} else if (diff >= 10 && diff < 20) {
-			feedback.text("hot");
-		} else if (diff >=1 && diff < 10) {
-			feedback.text("very hot");
+
+		var diff = (Math.abs(secretNum - num));
+
+		if (diff === 0) { //User guesses right
+			$("#userGuess").hide();
+			$("#guessButton").hide();
+			feedback.text("You guessed the number!");
+
+		} else {
+			guessCount++;
+			$("#count").text(guessCount);
+
+			if (diff >= 50) {
+				feedback.text("Ice Cold");
+			} else if (diff >= 30 && diff < 50) {
+				feedback.text("Cold");
+			} else if (diff >= 10 && diff < 20) {
+				feedback.text("hot");
+			} else if (diff >=1 && diff < 10) {
+				feedback.text("very hot");
+			}
 		}
 	}
 }
